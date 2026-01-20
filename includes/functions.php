@@ -113,4 +113,14 @@ function verifyMathCaptcha($user_answer) {
     }
     return false;
 }
+
+/**
+ * Shorten Text
+ */
+function shortenText($text, $chars = 100) {
+    if (strlen($text) > $chars) {
+        return substr($text, 0, $chars) . "...";
+    }
+    return $text;
+}
 ?>
