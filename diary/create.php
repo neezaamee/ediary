@@ -8,6 +8,8 @@ if (!isLoggedIn()) {
     redirect('login.php');
 }
 
+$user_id = $_SESSION['user_id'];
+
 // Fetch Memory Types
 $types_res = $conn->query("SELECT * FROM memory_types ORDER BY name ASC");
 $types = [];
@@ -34,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!verifyCSRFToken($_POST['csrf_token'])) {
         $error = "CSRF Token Validation Failed";
     } else {
-        $user_id = $_SESSION['user_id'];
         $title = sanitize($_POST['title']);
         $content = $_POST['content']; 
         $mood = sanitize($_POST['mood']);
