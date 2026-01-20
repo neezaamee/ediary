@@ -17,8 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $login_id = sanitize($_POST['login_id']); // Username or Email
         $password = $_POST['password'];
 
-        if (empty($login_id) || empty($password)) {
-            $error = "Please enter username/email and password.";
+        if (empty($login_id) || empty($password) || empty($_POST['captcha'])) {
+            $error = "Please enter username/email, password, and captcha.";
+        } elseif (!verifyMathCaptcha($_POST['captcha'])) {
+            $error = "Incorrect captcha answer.";
         } else {
             // Check user by username OR email
             $stmt = $conn->prepare("SELECT id, username, full_name, password_hash, role, is_banned, failed_login_attempts, lockout_time FROM users WHERE username = ? OR email = ?");
@@ -100,6 +102,14 @@ require_once 'includes/header.php';
                     <label class="form-check-label" for="rememberMe">
                         Remember me
                     </label>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Are you human? (Captcha)</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><?php echo generateMathCaptcha(); ?> = </span>
+                        <input type="number" class="form-control" name="captcha" placeholder="Result" required>
+                    </div>
                 </div>
 
                 <div class="d-grid gap-2">

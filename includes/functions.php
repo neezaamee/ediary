@@ -94,12 +94,23 @@ function redirect($url) {
 }
 
 /**
- * Shorten Text
+ * Generate Math Captcha
  */
-function shortenText($text, $chars = 100) {
-    if (strlen($text) > $chars) {
-        return substr($text, 0, $chars) . "...";
+function generateMathCaptcha() {
+    $num1 = rand(1, 9);
+    $num2 = rand(1, 9);
+    $_SESSION['captcha_answer'] = $num1 + $num2;
+    return "$num1 + $num2";
+}
+
+/**
+ * Verify Math Captcha
+ */
+function verifyMathCaptcha($user_answer) {
+    if (isset($_SESSION['captcha_answer']) && (int)$user_answer === (int)$_SESSION['captcha_answer']) {
+        unset($_SESSION['captcha_answer']);
+        return true;
     }
-    return $text;
+    return false;
 }
 ?>

@@ -21,8 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm_password'];
 
-        if (empty($full_name) || empty($username) || empty($email) || empty($password)) {
-            $error = "All fields are required.";
+        if (empty($full_name) || empty($username) || empty($email) || empty($password) || empty($_POST['captcha'])) {
+            $error = "All fields and captcha are required.";
+        } elseif (!verifyMathCaptcha($_POST['captcha'])) {
+            $error = "Incorrect captcha answer.";
         } elseif ($password !== $confirm_password) {
             $error = "Passwords do not match.";
         } else {
@@ -90,6 +92,14 @@ require_once 'includes/header.php';
                 <div class="mb-3">
                     <label for="confirm_password" class="form-label">Confirm Password</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Are you human? (Captcha)</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><?php echo generateMathCaptcha(); ?> = </span>
+                        <input type="number" class="form-control" name="captcha" placeholder="Result" required>
+                    </div>
                 </div>
 
                 <div class="d-grid gap-2">
