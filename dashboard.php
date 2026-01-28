@@ -139,8 +139,8 @@ $stmt->close();
 
 // === Logic for "On This Day" ===
 $on_this_day = [];
-// Match Month and Day, but Year < Current Year
-$otd_sql = "SELECT * FROM diary_entries WHERE user_id = ? AND MONTH(date_gregorian) = MONTH(CURRENT_DATE()) AND DAY(date_gregorian) = DAY(CURRENT_DATE()) AND YEAR(date_gregorian) < YEAR(CURRENT_DATE())";
+// Match Month and Day, regardless of Year
+$otd_sql = "SELECT * FROM diary_entries WHERE user_id = ? AND MONTH(date_gregorian) = MONTH(CURRENT_DATE()) AND DAY(date_gregorian) = DAY(CURRENT_DATE()) ORDER BY date_gregorian DESC";
 $stmt = $conn->prepare($otd_sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -170,7 +170,7 @@ require_once 'includes/header.php';
         <div class="glass-card text-center py-4">
             <h1 class="display-4">Hello, <?php echo htmlspecialchars($_SESSION['full_name']); ?>!</h1>
             <p class="lead text-muted">How was your day? Capture your memories today.</p>
-            <div class="d-flex justify-content-center gap-4 mt-3">
+            <div class="d-flex justify-content-center flex-wrap gap-2 gap-md-4 mt-3">
                 <div class="badge bg-light text-dark p-3 shadow-sm">
                     <i class="fa-regular fa-calendar me-2"></i> <?php echo $date_gregorian; ?>
                 </div>
@@ -210,7 +210,11 @@ require_once 'includes/header.php';
                          <li class="list-group-item bg-transparent">
                              <strong><?php echo htmlspecialchars($otd['title']); ?></strong>
                              <?php $years_ago = date('Y') - date('Y', strtotime($otd['date_gregorian'])); ?>
-                             <span class="badge bg-secondary float-end"><?php echo $years_ago; ?> year<?php echo $years_ago > 1 ? 's' : ''; ?> ago</span>
+                             <?php if ($years_ago > 0): ?>
+                                <span class="badge bg-secondary float-end"><?php echo $years_ago; ?> year<?php echo $years_ago > 1 ? 's' : ''; ?> ago</span>
+                             <?php else: ?>
+                                <span class="badge bg-success float-end">Today</span>
+                             <?php endif; ?>
                              <br>
                              <a href="diary/view.php?id=<?php echo $otd['id']; ?>" class="small text-muted">Read entry</a>
                          </li>
@@ -256,8 +260,14 @@ require_once 'includes/header.php';
             <?php if ($recent_entries->num_rows > 0): ?>
                 <div class="row">
                     <?php while($row = $recent_entries->fetch_assoc()): ?>
+                        <?php 
+                            $first_image = !empty($row['image_url']) ? $row['image_url'] : getFirstImage(htmlspecialchars_decode($row['content'])); 
+                        ?>
                         <div class="col-md-12 mb-3">
                             <div class="card shadow-sm border-0 diary-entry-card" onclick="window.location.href='diary/view.php?id=<?php echo $row['id']; ?>'">
+                                <?php if ($first_image): ?>
+                                    <div style="height: 150px; overflow: hidden; background-position: center; background-size: cover; background-image: url('<?php echo htmlspecialchars($first_image); ?>'); border-radius: 5px 5px 0 0;"></div>
+                                <?php endif; ?>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <h5 class="card-title text-primary"><?php echo htmlspecialchars($row['title']); ?></h5>

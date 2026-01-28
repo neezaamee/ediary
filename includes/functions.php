@@ -123,4 +123,14 @@ function shortenText($text, $chars = 100) {
     }
     return $text;
 }
+
+/**
+ * Get First Image from Content
+ */
+function getFirstImage($content) {
+    if (preg_match('/<img\s+[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>/i', $content, $matches)) {
+        return $matches[1];
+    }
+    return null;
+}
 ?>

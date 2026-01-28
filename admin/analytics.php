@@ -43,6 +43,28 @@ $top_users = $conn->query("SELECT u.username, u.full_name, COUNT(d.id) as entry_
                            ORDER BY entry_count DESC 
                            LIMIT 10");
 
+// 5. User Age Distribution
+$age_sql = "SELECT 
+                CASE 
+                    WHEN dob IS NULL THEN 'Unknown'
+                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) < 18 THEN 'Under 18'
+                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 18 AND 24 THEN '18-24'
+                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 25 AND 34 THEN '25-34'
+                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 35 AND 44 THEN '35-44'
+                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 45 AND 54 THEN '45-54'
+                    ELSE '55+'
+                END as age_group,
+                COUNT(*) as cnt 
+            FROM users 
+            GROUP BY age_group";
+$age_res = $conn->query($age_sql);
+$age_labels = [];
+$age_data = [];
+while($row = $age_res->fetch_assoc()) {
+    $age_labels[] = $row['age_group'];
+    $age_data[] = $row['cnt'];
+}
+
 require_once 'includes/header.php';
 ?>
 
@@ -161,6 +183,20 @@ require_once 'includes/header.php';
                 label: 'New Memories',
                 data: <?php echo json_encode($activity_data); ?>,
                 backgroundColor: '#27ae60'
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // Age Distribution
+    const ctxAge = document.getElementById('ageChart').getContext('2d');
+    new Chart(ctxAge, {
+        type: 'pie',
+        data: {
+            labels: <?php echo json_encode($age_labels); ?>,
+            datasets: [{
+                data: <?php echo json_encode($age_data); ?>,
+                backgroundColor: ['#1abc9c', '#3498db', '#9b59b6', '#f1c40f', '#e67e22', '#e74c3c', '#95a5a6']
             }]
         },
         options: { responsive: true }

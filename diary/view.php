@@ -36,7 +36,7 @@ require_once '../includes/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-9">
+    <div class="col-lg-8 col-md-10">
         <div class="glass-card fade-in">
             <?php 
                 $is_locked = ($entry['unlock_date'] && strtotime($entry['unlock_date']) > time());
@@ -47,6 +47,7 @@ require_once '../includes/header.php';
                     <?php if (!$is_locked): ?>
                         <a href="share.php?id=<?php echo $entry['id']; ?>" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-share-nodes"></i> Share as Card</a>
                         <a href="edit.php?id=<?php echo $entry['id']; ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen"></i> Edit</a>
+                        <a href="delete.php?id=<?php echo $entry['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this memory? This action cannot be undone.');"><i class="fa-solid fa-trash"></i> Delete</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -66,6 +67,9 @@ require_once '../includes/header.php';
                 <h1 class="display-6 text-primary mb-2"><?php echo htmlspecialchars($entry['title']); ?></h1>
                 <div class="text-muted mb-4 d-flex align-items-center flex-wrap">
                     <span class="me-3"><i class="fa-regular fa-calendar"></i> <?php echo date('d F Y', strtotime($entry['date_gregorian'])); ?></span>
+                    <?php if ($entry['date_hijri']): ?>
+                        <span class="me-3"><i class="fa-solid fa-moon"></i> <?php echo htmlspecialchars($entry['date_hijri']); ?></span>
+                    <?php endif; ?>
                     <?php if ($entry['mood']): ?>
                         <span class="badge bg-light text-dark border me-2"><?php echo htmlspecialchars($entry['mood']); ?></span>
                     <?php endif; ?>
@@ -82,6 +86,12 @@ require_once '../includes/header.php';
                         <span class="badge bg-dark"><i class="fa-solid fa-lock"></i> Private</span>
                     <?php endif; ?>
                 </div>
+
+                <?php if (!empty($entry['image_url'])): ?>
+                    <div class="mb-4 text-center">
+                        <img src="../<?php echo $entry['image_url']; ?>" class="img-fluid rounded shadow-sm" style="max-height: 400px; width: auto;" alt="Memory Image">
+                    </div>
+                <?php endif; ?>
 
                 <hr>
 

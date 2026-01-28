@@ -107,7 +107,7 @@ require_once 'includes/header.php';
 
 <div class="row">
     <!-- Mood Distribution -->
-    <div class="col-md-4 mb-4">
+    <div class="col-lg-4 col-md-6 mb-4">
         <div class="glass-card">
             <h5><i class="fa-solid fa-face-smile"></i> Mood Split</h5>
             <canvas id="moodChart" height="250"></canvas>
@@ -115,7 +115,7 @@ require_once 'includes/header.php';
     </div>
 
     <!-- Energy Level Trend -->
-    <div class="col-md-8 mb-4">
+    <div class="col-lg-8 col-md-6 mb-4">
         <div class="glass-card">
             <h5><i class="fa-solid fa-bolt"></i> Energy Level Timeline</h5>
             <canvas id="energyChart" height="120"></canvas>

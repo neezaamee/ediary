@@ -45,14 +45,14 @@ require_once '../includes/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-xl-8 col-lg-10 col-md-12">
         <div class="glass-card text-center fade-in">
             <h2 class="mb-4"><i class="fa-solid fa-image text-primary"></i> Create Memory Card</h2>
             <p class="text-muted">Turn your diary entry into a beautiful shareable card.</p>
 
             <div class="row mt-5">
-                <div class="col-md-6">
-                    <h5>Choose a Theme</h5>
+                <div class="col-md-5 order-2 order-md-1">
+                    <h5 class="mb-3">Choose a Theme</h5>
                     <form action="" method="POST" class="mt-3">
                         <div class="d-grid gap-3 mb-4 text-start">
                             <div class="form-check card-select p-3 border rounded <?php echo $theme == 'modern' ? 'border-primary bg-light' : ''; ?>">
@@ -74,29 +74,36 @@ require_once '../includes/header.php';
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg w-100">
-                             <i class="fa-solid fa-arrows-rotate me-2"></i> Regenerate Preview
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                             <i class="fa-solid fa-arrows-rotate me-2"></i> Regenerate
                         </button>
                     </form>
                 </div>
                 
-                <div class="col-md-6">
-                    <h5>Preview</h5>
-                    <div class="card-preview-container mt-3 border rounded bg-light p-2" style="min-height: 400px;">
+                <div class="col-md-7 order-1 order-md-2 mb-4 mb-md-0">
+                    <h5 class="mb-3">Preview</h5>
+                    <div class="card-preview-container d-flex align-items-center justify-content-center border rounded bg-light p-2 w-100">
                         <?php if ($card_path): ?>
-                            <img src="<?php echo BASE_URL . $card_path; ?>" class="img-fluid rounded shadow-sm" alt="Memory Card">
-                            <div class="mt-3">
-                                <a href="<?php echo BASE_URL . $card_path; ?>" download="MyDiary_Card.png" class="btn btn-success">
-                                    <i class="fa-solid fa-download"></i> Download Image
+                            <img src="<?php echo BASE_URL . $card_path; ?>" class="img-fluid rounded shadow-sm" alt="Memory Card" style="max-height: 80vh; object-fit: contain;">
+                            <div class="mt-2 text-center d-md-none">
+                                <a href="<?php echo BASE_URL . $card_path; ?>" download="MyDiary_Card.png" class="btn btn-success w-100">
+                                    <i class="fa-solid fa-download"></i> Download
                                 </a>
                             </div>
                         <?php else: ?>
-                            <div class="d-flex flex-column justify-content-center h-100 py-5 text-muted">
+                            <div class="d-flex flex-column justify-content-center align-items-center text-muted py-5 mx-auto" style="min-height: 300px;">
                                 <i class="fa-solid fa-wand-magic-sparkles fa-3x mb-3"></i>
-                                <p>Select a theme to generate preview</p>
+                                <p>Select a theme to preview</p>
                             </div>
                         <?php endif; ?>
                     </div>
+                     <?php if ($card_path): ?>
+                        <div class="mt-3 text-center d-none d-md-block">
+                             <a href="<?php echo BASE_URL . $card_path; ?>" download="MyDiary_Card.png" class="btn btn-success">
+                                <i class="fa-solid fa-download"></i> Download Image
+                            </a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 

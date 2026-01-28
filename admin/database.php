@@ -26,12 +26,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'backup') {
             while ($row = $result->fetch_row()) {
                 $return .= "INSERT INTO " . $table . " VALUES(";
                 for ($j = 0; $j < $num_fields; $j++) {
-                    $row[$j] = addslashes($row[$j]);
-                    $row[$j] = str_replace("\n", "\\n", $row[$j]);
                     if (isset($row[$j])) {
+                        $row[$j] = addslashes($row[$j]);
+                        $row[$j] = str_replace("\n", "\\n", $row[$j]);
                         $return .= '"' . $row[$j] . '"';
                     } else {
-                        $return .= '""';
+                        $return .= 'NULL';
                     }
                     if ($j < ($num_fields - 1)) {
                         $return .= ',';
@@ -63,7 +63,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'backup') {
 if (isset($_POST['action']) && $_POST['action'] == 'restore' && isset($_FILES['sql_file'])) {
     $file = $_FILES['sql_file']['tmp_name'];
     if (file_exists($file)) {
-        $sql = file_get_contents($file);
+        $sql = "SET FOREIGN_KEY_CHECKS = 0; SET SQL_MODE = '';\n" . file_get_contents($file) . "\nSET FOREIGN_KEY_CHECKS = 1;";
         
         // Execute multi-query
         if ($conn->multi_query($sql)) {

@@ -1,25 +1,30 @@
 /* assets/css/style.css */
 
 :root {
-    --primary-color: #6a11cb;
-    --secondary-color: #2575fc;
-    --bg-color: #f4f7f6;
-    --text-color: #333;
-    --card-bg: rgba(255, 255, 255, 0.8);
-    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+    --primary-color: #4e73df;
+    /* Bootstrap-like Indigo */
+    --secondary-color: #224abe;
+    --accent-color: #36b9cc;
+    /* Bootstrap-like Cyan */
+    --bg-color: #f8f9fc;
+    --text-color: #4e5e7a;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.5);
+    --nav-bg: rgba(255, 255, 255, 0.95);
 }
 
 body.dark-mode {
-    --bg-color: #121212;
-    --text-color: #e0e0e0;
-    --card-bg: rgba(30, 30, 30, 0.8);
+    --bg-color: #1a202c;
+    --text-color: #cbd5e0;
+    --card-bg: rgba(45, 55, 72, 0.9);
     --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --nav-bg: rgba(26, 32, 44, 0.95);
 }
 
 body {
     background: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: background 0.3s, color 0.3s;
     min-height: 100vh;
 }
@@ -27,50 +32,57 @@ body {
 /* Glassmorphism Card */
 .glass-card {
     background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: var(--glass-border);
-    border-radius: 15px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-bottom: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (max-width: 576px) {
+    .glass-card {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
 }
 
 /* Navbar */
 .navbar {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background: var(--nav-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 1050;
-    /* Ensure navbar is above content */
-    position: relative;
-}
-
-body.dark-mode .navbar {
-    background: rgba(18, 18, 18, 0.95);
+    transition: background 0.3s;
 }
 
 /* Buttons */
 .btn-primary {
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     border: none;
-    transition: transform 0.2s;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(78, 115, 223, 0.35);
 }
 
 /* Animations */
 .fade-in {
-    animation: fadeIn 0.5s ease-in-out;
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
 
     to {
@@ -81,12 +93,15 @@ body.dark-mode .navbar {
 
 /* Diary Entry Card */
 .diary-entry-card {
-    transition: transform 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    border: none;
+    overflow: hidden;
 }
 
 .diary-entry-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Autograph Wall */
@@ -95,12 +110,34 @@ body.dark-mode .navbar {
     font-size: 1.2rem;
     background: #fff9c4;
     color: #333;
-    transform: rotate(-2deg);
-    padding: 15px;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+    transform: rotate(-1.5deg);
+    padding: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+@media (max-width: 768px) {
+    .autograph-note {
+        transform: none;
+        font-size: 1.1rem;
+        padding: 15px;
+    }
 }
 
 body.dark-mode .autograph-note {
-    background: #4a4a4a;
-    color: #fff9c4;
+    background: #2d3748;
+    color: #f7fafc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Summernote Fix */
+.note-modal-backdrop {
+    z-index: 1040 !important;
+    /* Below Navbar (1050) but higher than others if needed, adjust if modal is hidden */
+}
+
+.note-modal {
+    z-index: 1060 !important;
+    /* Above Navbar */
 }

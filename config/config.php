@@ -1,5 +1,6 @@
 <?php
 // config/config.php
+header('Content-Type: text/html; charset=utf-8');
 
 define('APP_NAME', 'MyDiary');
 define('BASE_URL', 'http://localhost/MyDiary/'); // Adjust if needed

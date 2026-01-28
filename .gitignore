@@ -18,3 +18,7 @@ Thumbs.db
 # Vendor
 vendor/
 node_modules/
+
+# Archives and Temp
+*.zip
+migrate_*.php

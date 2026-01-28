@@ -119,19 +119,19 @@ require_once '../includes/header.php';
                 <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                 
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-lg-6 col-md-12 mb-3 mb-lg-0">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="What's on your mind?" required value="<?php echo isset($_POST['title']) ? $_POST['title'] : ''; ?>">
                     </div>
-                     <div class="col-md-3">
-                        <label for="memory_type" class="form-label">Memory Type</label>
+                     <div class="col-lg-3 col-6">
+                        <label for="memory_type" class="form-label">Type</label>
                         <select class="form-select" name="memory_type">
                             <?php foreach($types as $type): ?>
                                 <option value="<?php echo htmlspecialchars($type['name']); ?>"><?php echo htmlspecialchars($type['name']); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-lg-3 col-6">
                          <label class="form-label">Mood</label>
                         <select class="form-select" name="mood">
                              <?php foreach($moods as $m): ?>

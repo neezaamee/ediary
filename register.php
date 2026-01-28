@@ -18,10 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $full_name = sanitize($_POST['full_name']);
         $username = sanitize($_POST['username']);
         $email = sanitize($_POST['email']);
+        $dob = sanitize($_POST['dob']);
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm_password'];
 
-        if (empty($full_name) || empty($username) || empty($email) || empty($password) || empty($_POST['captcha'])) {
+        if (empty($full_name) || empty($username) || empty($email) || empty($dob) || empty($password) || empty($_POST['captcha'])) {
             $error = "All fields and captcha are required.";
         } elseif (!verifyMathCaptcha($_POST['captcha'])) {
             $error = "Incorrect captcha answer.";
@@ -39,8 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 // Hash Password
                 $password_hash = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $conn->prepare("INSERT INTO users (full_name, username, email, password_hash) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param("ssss", $full_name, $username, $email, $password_hash);
+                $stmt = $conn->prepare("INSERT INTO users (full_name, dob, username, email, password_hash) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssss", $full_name, $dob, $username, $email, $password_hash);
 
                 if ($stmt->execute()) {
                     setFlashMessage('success', 'Registration successful! Please login.');
@@ -72,6 +73,11 @@ require_once 'includes/header.php';
                 <div class="mb-3">
                     <label for="full_name" class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="full_name" name="full_name" required value="<?php echo isset($_POST['full_name']) ? $_POST['full_name'] : ''; ?>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" name="dob" required value="<?php echo isset($_POST['dob']) ? $_POST['dob'] : ''; ?>">
                 </div>
 
                 <div class="mb-3">

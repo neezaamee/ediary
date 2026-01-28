@@ -13,7 +13,7 @@ $error = '';
 $success = '';
 
 // Fetch current user data
-$stmt = $conn->prepare("SELECT full_name, username, email FROM users WHERE id = ?");
+$stmt = $conn->prepare("SELECT full_name, dob, username, email FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "CSRF Token Validation Failed";
     } else {
         $full_name = sanitize($_POST['full_name']);
+        $dob = sanitize($_POST['dob']);
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
         $current_password = $_POST['current_password'];
@@ -37,10 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $res = $stmt->get_result()->fetch_assoc();
             
             if (password_verify($current_password, $res['password_hash'])) {
-                // Update Name
-                $upd_sql = "UPDATE users SET full_name = ? WHERE id = ?";
+                // Update Name & DOB
+                $upd_sql = "UPDATE users SET full_name = ?, dob = ? WHERE id = ?";
                 $stmt = $conn->prepare($upd_sql);
-                $stmt->bind_param("si", $full_name, $user_id);
+                $stmt->bind_param("ssi", $full_name, $dob, $user_id);
                 $stmt->execute();
                 $_SESSION['full_name'] = $full_name; // Update session
                 $success = "Profile updated successfully.";
@@ -70,7 +71,7 @@ require_once 'includes/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-lg-8 col-md-10">
         <div class="glass-card fade-in">
             <h2 class="mb-4"><i class="fa-solid fa-user-gear text-primary"></i> Edit Profile</h2>
 
@@ -95,9 +96,15 @@ require_once 'includes/header.php';
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="full_name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user['full_name']); ?>" required>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="full_name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user['full_name']); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob" name="dob" value="<?php echo htmlspecialchars($user['dob']); ?>" required>
+                    </div>
                 </div>
 
                 <hr>
